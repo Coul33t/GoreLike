@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoreLike", "GuoreLike\GoreLike.csproj", "{04DD0BC5-8AA0-4D54-8B36-06306773970C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoreLike", "GoreLike\GoreLike.csproj", "{04DD0BC5-8AA0-4D54-8B36-06306773970C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
