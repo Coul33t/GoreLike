@@ -3,7 +3,7 @@ using RLNET;
 using RogueSharp;
 
 namespace GoreLike.Core {
-    class Actor : IActor, IDrawable {
+    public class Actor : IActor, IDrawable {
         
         // IActor
         public string name { get; set; }
