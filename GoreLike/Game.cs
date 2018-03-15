@@ -1,6 +1,7 @@
 ﻿using RLNET;
 using GoreLike.Core;
 using GoreLike.Systems;
+using RogueSharp.Random;
 
 namespace GoreLike {
     public class Game {
@@ -23,8 +24,11 @@ namespace GoreLike {
         public static DungeonMap dungeon_map {get; private set;}
         public static Player player { get; private set; }
         public static CommandSystem command_system { get; private set; }
+        public static MessageLog message_log { get; private set; }
 
         private static bool _render_required = true;
+
+        public static IRandom random { get; private set; }
 
         public static void Main() {
             string fontFileName = "Cheepicus_12x12.png";
@@ -52,11 +56,8 @@ namespace GoreLike {
             // Set up a handler for RLNET's Render event
             _root_console.Render += OnRootConsoleRender;
 
-            _message_console.SetBackColor(0, 0, Constants.message_width, Constants.message_height, Swatch.DbDeepWater);
-            _message_console.Print(1, 1, "Messages", Colours.TextHeading);
-
-            _stat_console.SetBackColor(0, 0, Constants.stat_width, Constants.stat_height, Swatch.DbOldStone);
-            _stat_console.Print(1, 1, "Stats", Colours.TextHeading);
+            message_log = new MessageLog();
+            message_log.Add("The rogue arrive on level 1.");
 
             _inventory_console.SetBackColor(0, 0, Constants.inventory_width, Constants.inventory_height, Swatch.DbWood);
             _inventory_console.Print(1, 1, "Inventory", Colours.TextHeading);
@@ -84,8 +85,10 @@ namespace GoreLike {
                     _root_console.Close();
             }
 
-            if(did_player_act)
+            if(did_player_act) {
                 _render_required = true;
+            }
+                
         }
 
         // Event handler for RLNET's Render event
@@ -95,6 +98,8 @@ namespace GoreLike {
 
                 dungeon_map.Draw(_map_console);
                 player.Draw(_map_console, dungeon_map);
+                player.DrawStats(_stat_console);
+                message_log.Draw(_message_console);
 
                 RLConsole.Blit(_map_console, 0, 0, Constants.map_width, Constants.map_height,
                     _root_console, 0, Constants.inventory_height);

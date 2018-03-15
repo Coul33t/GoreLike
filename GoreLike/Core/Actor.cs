@@ -9,6 +9,13 @@ namespace GoreLike.Core {
         public string name { get; set; }
         public int awareness { get; set; }
 
+        public int attack { get; set; }
+        public int defense { get; set; }
+        public int health { get; set; }
+        public int max_health { get; set; }
+        public int gold { get; set; }
+        public int speed { get; set; }
+
         // IDrawable
         public RLColor colour { set; get; }
         public char symbol { get; set; }

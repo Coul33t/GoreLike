@@ -1,14 +1,24 @@
 ﻿using RLNET;
 using RogueSharp;
+using System.Collections.Generic;
 
 namespace GoreLike.Core {
     public class DungeonMap : Map {
+
+        private readonly List<Monster> _monsters;
+
+        public DungeonMap() {
+            _monsters = new List<Monster>();
+        }
+
         public void Draw(RLConsole map_console) {
             map_console.Clear();
 
-            foreach(Cell cell in GetAllCells()) {
+            foreach(Cell cell in GetAllCells())
                 SetConsoleSymbolForCell(map_console, cell);
-            }
+
+            foreach(Monster monster in _monsters)
+                monster.Draw(map_console, this);
         }
 
         private void SetConsoleSymbolForCell(RLConsole map_console, Cell cell) {
@@ -64,6 +74,34 @@ namespace GoreLike.Core {
         public void SetIsWalkable(int x, int y, bool is_walkable) {
             Cell cell = GetCell(x, y);
             SetCellProperties(cell.X, cell.Y, cell.IsTransparent, is_walkable, cell.IsExplored);
+        }
+
+        public void AddMonster(Monster monster) {
+            _monsters.Add(monster);
+            SetIsWalkable(monster.x, monster.y, false);
+        }
+
+        public Point GetWalkableTile(Rectangle room) {
+            if (HasWalkableTile(room)) {
+                for (int i = 0 ; i < 100 ; i++) {
+                    int x = Game.random.Next(1, room.Width - 2) + room.X;
+                    int y = Game.random.Next(1, room.Height - 2) + room.Y;
+
+                    if(IsWalkable(x, y))
+                        return new Point(x, y);
+                }
+            }
+
+            return null;
+        }
+
+        public bool HasWalkableTile(Rectangle room) {
+            for(int x = 1 ; x < room.Width - 1 ; x++)
+                for(int y = 1 ; y < room.Height - 1 ; y++)
+                    if(IsWalkable(x + room.X, y + room.Y))
+                        return true;
+
+            return false;
         }
     }
 }
