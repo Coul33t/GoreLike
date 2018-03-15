@@ -7,7 +7,10 @@ namespace GoreLike.Core {
 
         private readonly List<Monster> _monsters;
 
+        public List<Rectangle> rooms;
+
         public DungeonMap() {
+            rooms = new List<Rectangle>();
             _monsters = new List<Monster>();
         }
 
@@ -19,6 +22,12 @@ namespace GoreLike.Core {
 
             foreach(Monster monster in _monsters)
                 monster.Draw(map_console, this);
+        }
+
+        public void AddPlayer(Player player) {
+            Game.player = player;
+            SetIsWalkable(player.x, player.y, false);
+            UpdatePlayerFOV();
         }
 
         private void SetConsoleSymbolForCell(RLConsole map_console, Cell cell) {

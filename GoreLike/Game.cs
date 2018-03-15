@@ -2,6 +2,7 @@
 using GoreLike.Core;
 using GoreLike.Systems;
 using RogueSharp.Random;
+using System;
 
 namespace GoreLike {
     public class Game {
@@ -22,7 +23,7 @@ namespace GoreLike {
         private static RLConsole _inventory_console;
 
         public static DungeonMap dungeon_map {get; private set;}
-        public static Player player { get; private set; }
+        public static Player player { get; set; }
         public static CommandSystem command_system { get; private set; }
         public static MessageLog message_log { get; private set; }
 
@@ -31,8 +32,11 @@ namespace GoreLike {
         public static IRandom random { get; private set; }
 
         public static void Main() {
+            int seed = (int)DateTime.UtcNow.Ticks;
+            random = new DotNetRandom(seed);
+
             string fontFileName = "Cheepicus_12x12.png";
-            string consoleTitle = "RougeSharp V3 Tutorial - Level 1";
+            string consoleTitle = $"RougeSharp V3 Tutorial - Level 1 - Seed {seed}";
 
             // Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
             _root_console = new RLRootConsole(fontFileName, Constants.screen_width, Constants.screen_height,
@@ -43,10 +47,9 @@ namespace GoreLike {
             _stat_console = new RLConsole(Constants.stat_width, Constants.stat_height);
             _inventory_console = new RLConsole(Constants.inventory_width, Constants.inventory_height);
 
-            MapGenerator map_generator = new MapGenerator(Constants.map_width, Constants.map_height);
+            MapGenerator map_generator = new MapGenerator(Constants.map_width, Constants.map_height, 20, 7, 13);
             dungeon_map = map_generator.CreateMap();
 
-            player = new Player();
             dungeon_map.UpdatePlayerFOV();
 
             command_system = new CommandSystem();
